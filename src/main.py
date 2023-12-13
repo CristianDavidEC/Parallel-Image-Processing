@@ -1,6 +1,5 @@
 from kernels_proccesor.multiprocess import apply_filter_multiprocessing
-from kernels import KERNELS
-
+from kernels.kernels import KERNELS
 
 for key, kernel in KERNELS.items():
     print(key, kernel)
