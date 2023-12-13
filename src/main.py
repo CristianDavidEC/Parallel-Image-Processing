@@ -1,4 +1,4 @@
-from kernels_proccesor.multi import apply_filter_multiprocessing
+from kernels_proccesor.multiprocess import apply_filter_multiprocessing
 from kernels import KERNELS
 
 
