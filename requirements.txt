@@ -7,3 +7,5 @@ tqdm
 mpi4py
 pycuda
 numba
+matplotlib
+tk

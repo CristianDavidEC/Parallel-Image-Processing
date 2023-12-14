@@ -1,14 +1,16 @@
-from dowloader.dowload_images import thread_download_images
-from dotenv import load_dotenv
-from kernels.kernels import KERNELS
 import os
 import threading
 import time
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+import random as ramdom
+from dowloader.dowload_images import thread_download_images
+from dotenv import load_dotenv
+from kernels.kernels import KERNELS
 from mpi_exe import mpi_execute
 from kernels_proccesor.multiprocess import apply_filter_multiprocessing
 from kernels_proccesor.cuda_process import apply_cuda
 from tqdm import tqdm
-
 
 def main():
     print('PARALLEL COMPUTING IMAGES')
@@ -130,6 +132,24 @@ def parallel_computing_options():
         else:
             print('Invalid option')
 
+def show_images():
+    path_images = './resources/images'
+    path_process = './resources/processed_images'
+    list_images = os.listdir(path_images)
+    list_images = ramdom.sample(list_images, 10)
+
+    for ruta_imagen in list_images:
+        img = mpimg.imread(f'{path_images}/{ruta_imagen}')
+        img_process = mpimg.imread(f'{path_process}/{ruta_imagen}')
+        fig, axs = plt.subplots(1, 2)
+        axs[0].imshow(img)
+        axs[0].set_title('Original')
+        axs[1].imshow(img_process, cmap='gray')
+        axs[1].set_title('Procesada')
+        axs[0].axis('off')
+        axs[1].axis('off')
+        plt.show()
+
 
 if __name__ == '__main__':
     # th_dw = threading.Thread(target=info_dowload)
@@ -138,4 +158,6 @@ if __name__ == '__main__':
     # print('\n')
     # time.sleep(3)
     # print('\n')
-    main()
+    # main()
+
+    show_images()
