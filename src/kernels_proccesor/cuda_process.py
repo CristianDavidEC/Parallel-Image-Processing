@@ -74,7 +74,7 @@ for key, kernel in KERNELS.items():
     path = './dog_2007.jpg'
     name_image = path.split('/')[-1].split('.')[0]
     image_out = apply_cuda(path, kernel)
-    image_path_out = f'./resources/processed_images/{name_image}_{key}.jpg'
+    image_path_out = f'../resources/processed_images/{name_image}_{key}.jpg'
     print(image_path_out)
     image = np.uint8(image_out)
     img = Image.fromarray(image)
