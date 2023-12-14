@@ -152,12 +152,12 @@ def show_images():
 
 
 if __name__ == '__main__':
-    # th_dw = threading.Thread(target=info_dowload)
-    # th_dw.start()
-    # th_dw.join()
-    # print('\n')
-    # time.sleep(3)
-    # print('\n')
-    # main()
+    th_dw = threading.Thread(target=info_dowload)
+    th_dw.start()
+    th_dw.join()
+    print('\n')
+    time.sleep(3)
+    print('\n')
+    main()
 
     show_images()
