@@ -44,8 +44,7 @@ def apply_filter_MPI():
     rank = comm.Get_rank()
 
     path_image = args[0]
-    key = args[1]
-    kernel = args[2:]
+    kernel = args[1:]
     kernel = format_kernel(kernel)
 
     if rank == 0:
@@ -72,13 +71,12 @@ def apply_filter_MPI():
         # Reconstruir la imagen final a partir de los fragmentos procesados
         result_image = np.vstack(gathered_result)
         final_image = Image.fromarray(result_image)
-        save_image(final_image, path_image, key)
+        save_image(final_image, path_image)
 
 
-def save_image(image, path_image, key):
+def save_image(image, path_image):
     name_image = path_image.split('/')[-1].split('.')[0]
-    image_path_out = f'../resources/processed_images/{name_image}_{key}.jpg'
-    print(image_path_out)
+    image_path_out = f'../resources/processed_images/{name_image}.jpg'
     image.save(image_path_out)
 
 

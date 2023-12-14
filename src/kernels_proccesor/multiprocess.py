@@ -49,4 +49,9 @@ def apply_filter_multiprocessing(path_image, kernel):
     # Combine the results
     edges = np.vstack(results)
 
-    return Image.fromarray(edges)
+    image_out = Image.fromarray(edges)
+    name_image = path_image.split('/')[-1].split('.')[0]
+    image_path_out = f'./resources/processed_images/{name_image}.jpg'
+    image_out.save(image_path_out)
+    
+    

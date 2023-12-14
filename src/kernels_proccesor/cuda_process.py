@@ -1,11 +1,13 @@
 import numpy as np
 import pycuda.driver as cuda
 from pycuda.compiler import SourceModule
-import pycuda.autoinit  
+import pycuda.autoinit
 from PIL import Image
 from kernels.kernels import KERNELS
 
 cuda.init()
+
+
 def apply_cuda(image_path, kernel):
     image = Image.open(image_path).convert('L')  # Convertir a escala de grises
     image_np = np.array(image).astype(np.float32)
@@ -18,19 +20,14 @@ def apply_cuda(image_path, kernel):
     kernel_gpu = cuda.mem_alloc(kernel.nbytes)
     cuda.memcpy_htod(image_gpu, image_np)
     cuda.memcpy_htod(kernel_gpu, kernel)
-    
-    output = np.zeros((image_np.shape[0], image_np.shape[1])).astype(np.float32)
-    print('nbtyes: ', output.nbytes)
-    output_cpu = cuda.mem_alloc(output.nbytes)
 
+    output = np.zeros(
+        (image_np.shape[0], image_np.shape[1])).astype(np.float32)
+    output_cpu = cuda.mem_alloc(output.nbytes)
 
     threads_per_block = (32, 32, 1)
     blocks_per_grid = (int(np.ceil(width / threads_per_block[0])),
                        int(np.ceil(height / threads_per_block[1])))
-    
-    print(f'Image size: {height}x{width}')
-    print(f'Size kernel: {size_kernel}')
-    print(f'Blocks: {blocks_per_grid}, Threads: {threads_per_block}')
     
     mod = SourceModule("""
 //cuda
@@ -66,18 +63,9 @@ def apply_cuda(image_path, kernel):
         width), np.int32(size_kernel), block=threads_per_block, grid=blocks_per_grid)
 
     cuda.memcpy_dtoh(output, output_cpu)
-    return output
 
-
-for key, kernel in KERNELS.items():
-    print(key, kernel)
-    path = './dog_2007.jpg'
-    name_image = path.split('/')[-1].split('.')[0]
-    image_out = apply_cuda(path, kernel)
-    image_path_out = f'../resources/processed_images/{name_image}_{key}.jpg'
-    print(image_path_out)
-    image = np.uint8(image_out)
+    name_image = image_path.split('/')[-1].split('.')[0]
+    image_path_out = f'./resources/processed_images/{name_image}.jpg'
+    image = np.uint8(output)
     img = Image.fromarray(image)
     img.save(image_path_out)
-
-
