@@ -35,7 +35,7 @@ def apply_cuda(image_path, kernel):
             int idX = blockIdx.x * blockDim.x + threadIdx.x;
             int idY = blockIdx.y * blockDim.y + threadIdx.y;
 
-            // center            
+            // center
             int c = size_k / 2;
 
             // calcular la posición central de la máscara (start)

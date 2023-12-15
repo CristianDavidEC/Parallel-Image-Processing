@@ -12,6 +12,7 @@ from kernels_proccesor.multiprocess import apply_filter_multiprocessing
 from kernels_proccesor.cuda_process import apply_cuda
 from tqdm import tqdm
 
+
 def main():
     print('PARALLEL COMPUTING IMAGES')
     kernel = kernel_options()
@@ -19,6 +20,10 @@ def main():
 
     print('\n')
     parallel_computing = parallel_computing_options()
+    n_procces = 0
+    if parallel_computing == 'MPI':
+        n_procces = int(input('Enter the number of procces to use: '))
+        print(f'Number of procces to use: {n_procces}')
     print(f'Parallel computing to use: {parallel_computing}')
 
     ruta_carpeta = 'resources/images'
@@ -28,7 +33,8 @@ def main():
     timer_init = time.time()
     for ruta_archivo in list_images:
         if os.path.isfile(os.path.join(ruta_carpeta, ruta_archivo)):
-            apply_kernel(ruta_archivo, kenerl_to_use, parallel_computing)
+            apply_kernel(ruta_archivo, kenerl_to_use,
+                         parallel_computing, n_procces)
             progress_bar.update(1)
 
     timer_end = time.time()
@@ -38,10 +44,10 @@ def main():
     print('Finish Execution')
 
 
-def apply_kernel(image, kernel, parallel_computing):
+def apply_kernel(image, kernel, parallel_computing, n_procces=4):
     path = f'./resources/images/{image}'
     if parallel_computing == 'MPI':
-        mpi_execute(f'.{path}', kernel)
+        mpi_execute(f'.{path}', kernel, n_procces)
     elif parallel_computing == 'CUDA':
         apply_cuda(path, kernel)
     elif parallel_computing == 'Multiprocessing':
@@ -50,6 +56,9 @@ def apply_kernel(image, kernel, parallel_computing):
 
 def info_dowload():
     print('PARALLEL COMPUTING IMAGES')
+    result = input('Want to download new images? (y/n):')
+    if result != 'y':
+        return
 
     number_images = input('Enter the number of images to process: ')
     number_images = int(number_images)
@@ -131,6 +140,7 @@ def parallel_computing_options():
             return options[option]
         else:
             print('Invalid option')
+
 
 def show_images():
     path_images = './resources/images'
