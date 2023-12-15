@@ -39,3 +39,5 @@ source nombre_del_entorno/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+
+Video: https://youtu.be/0IblYn45Hh8
